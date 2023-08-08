@@ -1,0 +1,33 @@
+@model BookWeb.ViewModels.UserVM
+
+@{
+    Layout = "_Layout";
+}
+
+<h1>Update User</h1>
+<form method="post">
+    <input asp-for="User.Id" class="form-control" hidden>
+    <div class="mb-3">
+        <label asp-for="User.FullName" class="form-label"></label>
+        <input asp-for="User.FullName" class="form-control">
+        <span asp-validation-for="User.FullName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="User.PhoneNumber" class="form-label"></label>
+        <input asp-for="User.PhoneNumber" class="form-control">
+        <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="User.Address" class="form-label"></label>
+        <input asp-for="User.Address" class="form-control">
+        <span asp-validation-for="User.Address" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Role" class="form-label"></label>
+        @Html.DropDownListFor(m => m.Role, Model.Rolelist,
+            "Please select role", new {@class = "form-control"})
+        <span asp-validation-for="Role" class="text-danger"></span>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

@@ -1,0 +1,131 @@
+@model BookWeb.ViewModels.ShoppingCartVM
+@{
+    Layout = "_Layout";
+}
+
+<form method="post">
+    <br/>
+    @if (Model.ListCarts.Count() > 0)
+    {
+        <div class="backgroundWhiteBorder">
+            <div class="container">
+                <div class="card">
+                    <div class="row">
+                        <div class="coL cart">
+                            <div class="title">
+                                <div class="row">
+                                    <div class="col"><h4><b>Shopping Cart</b></h4></div>
+                                </div>
+                            </div>    
+                            <div class="row border-top border-bottom">
+                                @foreach (var item in Model.ListCarts)
+                                {
+                                    <div class="row main align-items-center">
+                                        <div class="col-2"><img class="img-fluid" src="@item.Product.ImageUrl"></div>
+                                        <div class="col">
+                                            <div class="row text-muted">@item.Product.Title</div>
+                                            <div class="row">@item.Product.Description</div>
+                                        </div>
+                                        <div class="col">
+                                            <a asp-action="Minus" asp-route-cartId="@item.Id">-</a><a href="#" class="border">@item.Count</a><a asp-action="plus" asp-route-cartId="@item.Id">+</a>
+                                        </div>
+                                        @{
+                                            var price = item.Product.Price * item.Count;
+                                        }
+                                        <div class="col">$ @price<a class="close" asp-action="remove" asp-route-cartId="@item.Id">&#10005;</a></div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="back-to-shop"><a asp-controller="Cart" asp-action="Summary">Summary</a></div>
+                        </div>
+                    </div>
+                            
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div> There is no item in shopping cart </div>
+    }
+
+</form>
+
+
+
+<style>
+    .title{
+        margin-bottom: 5vh;
+    }
+    .card{
+        margin: auto;
+        max-width: 950px;
+        width: 90%;
+        box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        border-radius: 1rem;
+        border: transparent;
+    }
+   
+    .cart{
+        background-color: #fff;
+        padding: 4vh 5vh;
+        border-bottom-left-radius: 1rem;
+        border-top-left-radius: 1rem;
+    }
+  
+    .row{
+        margin: 0;
+    }
+    .title b{
+        font-size: 1.5rem;
+    }
+    .main{
+        margin: 0;
+        padding: 2vh 0;
+        width: 100%;
+    }
+    .col-2, .col{
+        padding: 0 1vh;
+    }
+    a{
+        padding: 0 1vh;
+    }
+    .close{
+        margin-left: auto;
+        font-size: 0.7rem;
+    }
+    img{
+        width: 3.5rem;
+    }
+    .back-to-shop{
+        margin-top: 4.5rem;
+    }
+    h5{
+        margin-top: 4vh;
+    }
+    hr{
+        margin-top: 1.25rem;
+    }
+  
+    select{
+        border: 1px solid rgba(0, 0, 0, 0.137);
+        padding: 1.5vh 1vh;
+        margin-bottom: 4vh;
+        outline: none;
+        width: 100%;
+        background-color: rgb(247, 247, 247);
+    }
+    input{
+        border: 1px solid rgba(0, 0, 0, 0.137);
+        padding: 1vh;
+        margin-bottom: 4vh;
+        outline: none;
+        width: 100%;
+        background-color: rgb(247, 247, 247);
+    }
+    input:focus::-webkit-input-placeholder
+    {
+          color:transparent;
+    }
+   
+</style>

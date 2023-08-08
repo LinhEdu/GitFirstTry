@@ -1,0 +1,55 @@
+@model IEnumerable<BookWeb.Models.Category>
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-4">
+        <h1>Category Table</h1>
+    </div>
+    <div class="col-8">
+        <form class="form-inline my-2 my-lg-0 float-right">
+            <input id="myInput" class="form-control mr-sm-2" type="text" placeholder="Search">
+        </form>
+    </div>
+</div>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Status</th>
+        <th scope="col">Action</th>
+    </tr>
+    </thead>
+    <tbody id="tblData">
+
+    @foreach (var obj in @Model)
+    {
+        <tr>
+            <th scope="row">@obj.Id</th>
+            <td>@obj.Name</td>
+            <td>@obj.Description</td>
+            <td>@obj.Status</td>
+            <td>
+                <a asp-controller="Categories" asp-action="Approved" asp-route-id="@obj.Id" class="btn btn-warning">Approve</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+    @section Scripts
+    {
+        <script>
+             $(document).ready(function (){
+                 $("#myInput").on("keyup", function(){
+                  var value = $(this).val().toLowerCase();
+                 $("#tblData tr").filter(function (){
+                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                 });
+             });
+         });
+        </script>
+    }
+</table>
