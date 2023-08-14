@@ -4,7 +4,6 @@ using BookWeb.Services.IServices;
 using BookWeb.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using OfficeOpenXml.Drawing.Chart.ChartEx;
 
 namespace AppdevBookShop.Services;
 
