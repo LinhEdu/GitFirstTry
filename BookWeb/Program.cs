@@ -1,7 +1,11 @@
+using AppdevBookShop.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using BookWeb.Data;
 using BookWeb.Initializer;
+using BookWeb.Repository;
+using BookWeb.Repository.IRepository;
+using BookWeb.Services.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +35,10 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<IUserServices, UserServices>();
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 var app = builder.Build();
 

@@ -1,5 +1,6 @@
 using BookWeb.Data;
 using BookWeb.Models;
+using BookWeb.Repository.IRepository;
 using BookWeb.Services.IServices;
 using BookWeb.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -10,21 +11,23 @@ namespace AppdevBookShop.Services;
 public class UserServices: IUserServices
 {
     private readonly UserManager<IdentityUser?> _userManager;
-    private readonly ApplicationDbContext _db;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly IRepository<User> _userRepository;
 
-    public UserServices(ApplicationDbContext db, UserManager<IdentityUser?> userManager,
+    public UserServices(
+        IRepository<User> userRepository, 
+        UserManager<IdentityUser?> userManager,
         RoleManager<IdentityRole> roleManager)
     {
         _userManager = userManager;
-        _db = db;
+        _userRepository = userRepository ;
         _roleManager = roleManager;
     }
 
     public async Task<List<User?>> GetAllUser(string currentUserId)
     {
         //dùng để tránh trường hợp xóa nhầm role của mình
-        var userList = _db.Users.Where(u => u.Id != currentUserId);
+        var userList = await _userRepository.GetAllAsync(u => u.Id != currentUserId);
 
         foreach (var user in userList)
         {
@@ -38,7 +41,7 @@ public class UserServices: IUserServices
     public async Task LockUnlock(string currentUserId, string id)
     {
         // tìm kiếm user theo id
-        var userNeedToLock = _db.Users.Where(u => u.Id == id).First();
+        var userNeedToLock = await _userRepository.GetByIdAsync(id);
         // chống tự khóa tài khoản chinh mình
         if (userNeedToLock.Id == currentUserId)
         {
@@ -56,12 +59,12 @@ public class UserServices: IUserServices
             userNeedToLock.LockoutEnd = DateTime.Now.AddYears(1);
         }
 
-        _db.SaveChanges();
+        await _userRepository.SaveChangesAsync();
     }
     
     public async Task<User?> GetUserById(string id)
     {
-        return await _db.Users.FindAsync(id);
+        return await _userRepository.GetByIdAsync(id);
     }
 
     public List<SelectListItem> GetRoleDropDown()
@@ -108,8 +111,8 @@ public class UserServices: IUserServices
         await _userManager.AddToRoleAsync(user, userVm.Role);
 
         // update và lưu thông tin
-        _db.Users.Update(user);
-        _db.SaveChanges();
+        _userRepository.Update(user);
+        _userRepository.SaveChangesAsync();
     }
 
     public async Task<(string, string)> ConfirmEmail(ConfirmEmailVM confirmEmailVm)
