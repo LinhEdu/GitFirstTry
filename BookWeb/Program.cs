@@ -1,4 +1,3 @@
-using AppdevBookShop.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using BookWeb.Data;
