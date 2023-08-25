@@ -4,7 +4,7 @@ using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
-namespace AppdevBookShop.Services;
+namespace BookWeb.Services;
 
 public class EmailServices : IEmailServices
 {
