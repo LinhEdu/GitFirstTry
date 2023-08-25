@@ -17,8 +17,8 @@ public class EmailServices : IEmailServices
     public async Task Send(string to, string subject, string html)
     {
         var DisplayName = "BookWeb";
-        var Mail = "";
-        var Password = "";
+        var Mail = "arklink23@gmail.com";
+        var Password = "lput oxch cdjb afwm";
         var Host = "smtp.gmail.com";
         var Port = 587;
 

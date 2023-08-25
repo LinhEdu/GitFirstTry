@@ -37,6 +37,7 @@ builder.Services.AddSession(options =>
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IUserServices, UserServices>();
+builder.Services.AddScoped<IEmailServices, EmailServices>();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 

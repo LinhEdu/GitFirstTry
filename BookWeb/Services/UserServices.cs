@@ -5,22 +5,25 @@ using BookWeb.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace AppdevBookShop.Services;
+namespace BookWeb.Services;
 
 public class UserServices: IUserServices
 {
     private readonly UserManager<IdentityUser?> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IRepository<User> _userRepository;
+    private readonly IEmailServices _emailServices;
 
     public UserServices(
         IRepository<User> userRepository, 
         UserManager<IdentityUser?> userManager,
-        RoleManager<IdentityRole> roleManager)
+        RoleManager<IdentityRole> roleManager,
+        IEmailServices emailServices)
     {
         _userManager = userManager;
         _userRepository = userRepository ;
         _roleManager = roleManager;
+        _emailServices = emailServices;
     }
 
     public async Task<List<User?>> GetAllUser(string currentUserId)
@@ -34,6 +37,7 @@ public class UserServices: IUserServices
             user.Role = roleTemp.FirstOrDefault();
         }
 
+        await _emailServices.Send("linh1236589@gmail.com", "Test Mail Hieu Linh", "<p>Hello linh</p>");
         return userList.ToList();
     }
     
