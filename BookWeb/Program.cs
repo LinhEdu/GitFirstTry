@@ -2,9 +2,11 @@ using AppdevBookShop.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using BookWeb.Data;
+using BookWeb.Helper;
 using BookWeb.Initializer;
 using BookWeb.Repository;
 using BookWeb.Repository.IRepository;
+using BookWeb.Services;
 using BookWeb.Services.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,6 +42,10 @@ builder.Services.AddScoped<IUserServices, UserServices>();
 builder.Services.AddScoped<IEmailServices, EmailServices>();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+builder.Services.AddOptions();  // Kích hoạt Options
+var mailsettings = builder.Configuration.GetSection("MailSettings"); // đọc config
+builder.Services.Configure<MailSettings>(mailsettings); // đăng kí để Inject
 
 var app = builder.Build();
 

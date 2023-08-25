@@ -1,5 +1,7 @@
+using BookWeb.Helper;
 using BookWeb.Services.IServices;
 using MailKit.Security;
+using Microsoft.Extensions.Options;
 using MimeKit;
 
 namespace AppdevBookShop.Services;
@@ -7,24 +9,20 @@ namespace AppdevBookShop.Services;
 public class EmailServices : IEmailServices
 {
     private readonly ILogger<EmailServices> _logger;
+    private readonly MailSettings _mailSettings;
 
-    public EmailServices(ILogger<EmailServices> logger)
+    public EmailServices(ILogger<EmailServices> logger, IOptions<MailSettings> mailSettings)
     {
         _logger = logger;
         _logger.LogInformation("Create MailService");
+        _mailSettings = mailSettings.Value;
     }
 
     public async Task Send(string to, string subject, string html)
     {
-        var DisplayName = "BookWeb";
-        var Mail = "arklink23@gmail.com";
-        var Password = "lput oxch cdjb afwm";
-        var Host = "smtp.gmail.com";
-        var Port = 587;
-
         var email = new MimeMessage();
-        email.Sender = new MailboxAddress(DisplayName, Mail);
-        email.From.Add(new MailboxAddress(DisplayName, Mail));
+        email.Sender = new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail);
+        email.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail));
         email.To.Add(MailboxAddress.Parse(to));
         email.Subject = subject;
 
@@ -38,8 +36,8 @@ public class EmailServices : IEmailServices
 
         try
         {
-            smtp.Connect(Host, Port, SecureSocketOptions.StartTls);
-            smtp.Authenticate(Mail, Password);
+            smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
             await smtp.SendAsync(email);
         }
         catch (Exception ex)
